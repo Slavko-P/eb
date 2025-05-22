@@ -1,0 +1,11 @@
+autopep8==2.3.2
+beautifulsoup4==4.13.4
+certifi==2025.4.26
+charset-normalizer==3.4.2
+idna==3.10
+pycodestyle==2.13.0
+requests==2.32.3
+soupsieve==2.7
+typing_extensions==4.13.2
+Unidecode==1.4.0
+urllib3==2.4.0
