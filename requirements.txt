@@ -5,8 +5,6 @@ bidict==0.23.1
 certifi==2025.4.26
 charset-normalizer==3.4.2
 click==8.2.1
-dbus-fast==2.44.1
-dbus-python==1.4.0
 idna==3.10
 Markdown==3.8
 oauthlib==3.2.2
