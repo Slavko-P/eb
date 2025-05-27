@@ -5,15 +5,25 @@ import requests
 from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
-# TODO separate module for link handling
+# TODO make link management its own module
 BASE_LINK = "https://www.kleinanzeigen.de"
+# c = category, l = location, r = radius (km)
+SEARCH_PARAMETERS = "/c192l9354r5"  # Verschenken/Freiburg/5km
 
-# TODO type hints
+# TODO type hints with mypy for static checking
 # proper term instead of "link" might be "url"
 
-def get_id(elem):
+# TODO get by page number, guard against fails
+def get_ad_elements(page=1):
+    link = BASE_LINK + "/seite:" + str(page) + SEARCH_PARAMETERS
+    doc = requests.get(link).text
+    soup = BeautifulSoup(doc, features='html.parser')
+    return soup.select('.aditem')
+
+
+def get_id(elem) -> str:
     id = elem.get("data-adid")
     if not id:
         # No ID found
@@ -22,7 +32,7 @@ def get_id(elem):
     return id
 
 class AdItem:
-    def __get_id__(self, elem):
+    def __get_id__(self, elem) -> str:
         id = elem.get("data-adid")
         if not id:
             # No ID found
@@ -30,7 +40,7 @@ class AdItem:
             return None
         return id
 
-    def __get_title__(self, elem):
+    def __get_title__(self, elem) -> str:
         elem_title = elem.select_one(".ellipsis")
         if not elem_title:
             # No title element found
@@ -38,7 +48,7 @@ class AdItem:
             return None
         return elem_title.text
 
-    def __get_pathname__(self, elem):
+    def __get_pathname__(self, elem) -> str:
         pathname = elem.get("data-href")
         if not pathname:
             # No pathname found
@@ -49,7 +59,7 @@ class AdItem:
     # Returns link to thumbnail image
     # Could be rewritten to return the full image,
     # without reloading the page (if needed)
-    def __get_image_link__(self, elem):
+    def __get_image_link__(self, elem) -> str:
         img_elem = elem.select_one("img")
         if not img_elem:
             # no image element found
@@ -66,6 +76,12 @@ class AdItem:
             logger.warning(f"AdItem: ID:{self.id} No date found")
             return None
         date_str = date_elem.text.strip()
+        
+        # Sponsored ads (Top-Anzeige) no date
+        if not date_str:
+            # No date string in date element
+            logger.info(f"AdItem: ID:{self.id} No date found (sponsored ad)")
+            return None
 
         # "Heute, HH:MM" and "Gestern, HH:MM" format
         try:
@@ -88,7 +104,7 @@ class AdItem:
             return None
 
     # TODO Make string manipulation easier to read?
-    def __get_area__(self, elem):
+    def __get_area__(self, elem) -> str:
         area_elem = elem.select_one(".aditem-main--top--left")
         if not area_elem:
             # No area element found
@@ -102,7 +118,7 @@ class AdItem:
         # char
         return area.split("(", 1)[0]
 
-    def __get_short_description__(self, elem):
+    def __get_short_description__(self, elem) -> str:
         desc_elem = elem.select_one(".aditem-main--middle--description")
         if not desc_elem:
             # Short description not found
@@ -130,7 +146,7 @@ class AdItem:
         # maybe seller info
 
     @property
-    def link(self):
+    def link(self) -> str:
         # saves a bit of space, I guess
         return BASE_LINK + self.pathname
 
@@ -138,7 +154,7 @@ class AdItem:
     # be more data/space efficient by storing the new soup then parse the data
     # this is just a naive approach
     @property
-    def full_description(self):
+    def full_description(self) -> str:
         if self.__full_description__:
             return self.__full_description__
         ad_page = requests.get(self.link).text
@@ -147,7 +163,7 @@ class AdItem:
             "#viewad-description-text").get_text(separator="\n").strip()
         return self.__full_description__
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (f"ID: {self.id}\n"
                 f"Title: {self.title}\n"
                 f"Link: {self.link}\n"
