@@ -1,3 +1,5 @@
+# TODO USE POSTGRES DATABASE ON RENDER.COM TO STORE SEEN IDs
+
 import atexit
 from collections import deque
 import time
@@ -13,6 +15,16 @@ import requests
 import apprise
 
 import scraper
+
+#SERVER
+import socket
+
+s = socket.socket()
+host = socket.gethostname()
+port = 10000
+s.bind((host, port))
+print(f"Faux server started at:{host}:{port}")
+##########
 
 # TODO log timestamps
 logger = logging.getLogger(__name__)
