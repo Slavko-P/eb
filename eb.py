@@ -34,7 +34,7 @@ def keyword_check(ad):
         # ignore case
         # remove accents
         k = unidecode(k.lower())
-        if (k in unidecode(ad.title.lower())) or (k in unidecode(ad.short_description.lower())):
+        if (k in unidecode(ad.title.lower())):
             return True
     return False
 
