@@ -80,7 +80,7 @@ def main():
         with open("seen_ids.p", "wb") as f:
             pickle.dump(seen_ids, f)
 
-        rand_wait = random.randint(5 * 60, 8 * 60) # 5-8 min
+        rand_wait = random.randint(5 * 60, 7 * 60) # 5-7 min
         logging.info(f"Waiting for {rand_wait}s (~{rand_wait / 60:.2f}m).")
         time.sleep(rand_wait)
 
