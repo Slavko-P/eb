@@ -43,6 +43,7 @@ def main():
     apobj = apprise.Apprise()
     # Linux desktop
     apobj.add("dbus://")
+    apobj.add("ntfy://eb_scraper")
     # my Telegram
     apobj.add(os.environ.get("TGRAM", None))
     # DOESNT WORK BUT SAYS THE NOTIF IS SENT, FIND OUT WHY
