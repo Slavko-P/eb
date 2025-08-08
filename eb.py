@@ -74,7 +74,8 @@ def main():
                 logging.info(f"New item: '{ad.title}' ({ad.id})")
                 if keyword_check(ad):
                     logging.info(f"Found match in: {ad_id}.")
-                    apobj.notify(title="FOUND MATCH", body=f"Found: '{ad.title}' ({ad.id})\n{ad.link}")
+                    # apobj.notify(title="FOUND MATCH", body=f"Found: '{ad.title}' ({ad.id})\n{ad.link}")
+                    apobj.notify(title=f"{ad.title} ({ad.id})", body=f"{ad.link}")
         logging.info(f"Found {found} new ad item(s) since last check.")
         # in case of unexpected exit afterwards
         with open("seen_ids.p", "wb") as f:
