@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # ad option to replace ü with ue and so on
-keywords = ["küche", "ofen", "herd", "spüle", "miele", "bosch", "siemens", "solar", "gpu", "grafikkarte", "pc"]
+keywords = ["ofen", "herd", "miele", "bosch", "siemens", "solar", "gpu", "grafikkarte", "pc", "playstation", "ps", "xbox", "wii", "nintendo"]
 # TODO needs way more work
 # External keyword list with auto update with reloading program
 # Maybe (optionaly) indicate which keyword hit and where
