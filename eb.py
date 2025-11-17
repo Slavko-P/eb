@@ -38,14 +38,17 @@ def keyword_check(ad):
             return True
     return False
 
+apobj = apprise.Apprise()
+# Linux desktop
+apobj.add("dbus://")
+apobj.add("ntfy://eb_scraper")
+# my Telegram
+apobj.add(os.environ.get("TGRAM", None))
+# notify everyone of script shutdown
+atexit.register(apobj.notify, title="SCRIPT SHUTDOWN", body="GOODBYE")
+
 # TODO make it look nicer
 def main():
-    apobj = apprise.Apprise()
-    # Linux desktop
-    apobj.add("dbus://")
-    apobj.add("ntfy://eb_scraper")
-    # my Telegram
-    apobj.add(os.environ.get("TGRAM", None))
     # DOESNT WORK BUT SAYS THE NOTIF IS SENT, FIND OUT WHY
     # notify(title="super duper secret message", body="Hi")
     # a page worth (25) + 5 in case some ads gets removed then put back
